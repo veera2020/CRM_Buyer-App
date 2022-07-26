@@ -1,0 +1,12 @@
+@import "~antd/dist/antd.css";
+
+.experience {
+  color: gray;
+}
+.experience option {
+  color: black !important;
+}
+
+.change_color {
+  color: black;
+}
