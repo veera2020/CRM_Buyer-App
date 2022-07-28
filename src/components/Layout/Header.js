@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import { Transition } from "@headlessui/react";
 import { Menu } from "antd";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 const { SubMenu } = Menu;
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const navigate = useNavigate();
   return (
     <div>
       <nav className="bg-gray-800">
@@ -13,11 +14,16 @@ const Header = () => {
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center">
               <div className="flex-shrink-0">
-                <img
-                  className="h-8 w-8"
-                  src="https://tailwindui.com/img/logos/workflow-mark-indigo-500.svg"
-                  alt="Workflow"
-                />
+                <div className="flex gap-2" onClick={() => navigate(-1)}>
+                  <img
+                    className="h-8 w-8"
+                    src="https://tailwindui.com/img/logos/workflow-mark-indigo-500.svg"
+                    alt="Workflow"
+                  />
+                  <div className="text-violet-300 font-semibold items-center pt-2">
+                    Buyer App
+                  </div>
+                </div>
               </div>
               <div className="hidden md:block">
                 {/* <div className="ml-10 flex items-baseline space-x-4">

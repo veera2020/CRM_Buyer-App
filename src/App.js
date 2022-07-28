@@ -14,6 +14,7 @@ import ChangePassword from "./screens/myaccount/ChangePassword";
 import Postrequirement from "./screens/requirements/Postrequirement";
 import Requirement from "./screens/requirements/Requirement";
 import Watchlive from "./screens/watchlive/Watchlive";
+import WatchlivewithId from "./screens/watchlive/WatchlivewithId";
 import Wallet from "./screens/wallet/Wallet";
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
         <Route path="requirements/post" element={<Postrequirement />} />
         <Route path="requirements/myrequirement" element={<Requirement />} />
         <Route path="watchLive" element={<Watchlive />} />
+        <Route path="watchLive/newPath/:id" element={<WatchlivewithId />} />
         <Route path="wallet" element={<Wallet />} />
         <Route path="*" element={<NotFound />} />
       </Routes>

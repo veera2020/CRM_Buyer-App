@@ -1,8 +1,15 @@
 import React, { useEffect, useState } from "react";
 import AgoraRTC from "agora-rtc-sdk";
 import { Button } from "@chakra-ui/react";
+
+import { useNavigate } from "react-router-dom";
 function LiveVideoStreaming(props) {
-  const [token, settoken] = useState("");
+  console.log(props);
+  const [loading, setLoading] = useState(false);
+  const [finishStatus, setfinishStatus] = useState(false);
+  const [enable, setenable] = useState(false);
+
+  const navigate = useNavigate();
   var rtc = {
     client: null,
     joined: false,
@@ -15,18 +22,13 @@ function LiveVideoStreaming(props) {
   // Options for joining a channel
   var option = {
     appID: "50c7493877764c85aa44d921a68f2b38",
-    channel: "live",
+    channel: props.data.requirementID,
     uid: null,
-    token:
-      "00650c7493877764c85aa44d921a68f2b38IABH+SIBMZ1vCtpfcHHCk/A8FYBUNPL2EYj/+fd9/O0LE68sD1MAAAAAEAAtDEjTmKnfYgEAAQCYqd9i",
-    //token.token,
-    // "00650c7493877764c85aa44d921a68f2b38IACOu5+uZsBJV5vQtTw556WepnvExfTId3w9AXX4q9we2q8sD1MAAAAAEAB3F92FN1rNYgEA6AMAAAAA",
-    //token:"00650c7493877764c85aa44d921a68f2b38IAAd8hpywu6GjjGcsvG5kK8qrjpJcl/SihYa73uxwCPE8a8sD1MAAAAAEACQKMvtd0DNYgEAAQB2QM1i",
-    // key: "897667d6840942eca11d94551acabec6",
-    //secret: "8e7ecd7603534f2f9df5cd3da0b0cbd5",
+    token: props.data.token,
   };
 
   function joinChannel(role) {
+    setLoading(true);
     // Create a client
     rtc.client = AgoraRTC.createClient({ mode: "live", codec: "vp8" });
     // Initialize the client
@@ -74,10 +76,10 @@ function LiveVideoStreaming(props) {
               });
             }
             if (role === "audience") {
+              setenable(true);
               rtc.client.on("connection-state-change", function (evt) {
                 console.log("audience", evt);
               });
-
               rtc.client.on("stream-added", function (evt) {
                 var remoteStream = evt.stream;
                 var id = remoteStream.getId();
@@ -136,6 +138,8 @@ function LiveVideoStreaming(props) {
     rtc.client.leave(
       function () {
         console.log("client leaves channel");
+        navigate("/watchlive");
+
         //……
       },
       function (err) {
@@ -144,32 +148,55 @@ function LiveVideoStreaming(props) {
       }
     );
   }
+  //reload the page
+  const onBackButtonEvent = (e) => {
+    e.preventDefault();
+    if (!finishStatus) {
+      if (window.confirm("Do you want to go back ?")) {
+        setfinishStatus(true);
+        leaveEventAudience("audience");
+        // leaveEventHost("host");
+        // your logic
+      } else {
+        window.history.pushState(null, null, window.location.pathname);
+        setfinishStatus(false);
+      }
+    }
+  };
 
-  //   useEffect(() => {
-  //     axios
-  //       .post("https://uyarchicrm.click/v1/liveStream")
-  //       .then((res) => settoken(res.data));
-  //   });
+  const goback = () => {
+    window.history.pushState(null, null, window.location.pathname);
+    window.addEventListener("popstate", onBackButtonEvent);
+    return () => {
+      window.removeEventListener("popstate", onBackButtonEvent);
+    };
+  };
   return (
     <div>
       {/* <Button size="xs" colorScheme="teal" onClick={() => joinChannel("host")}>Join Channel as Host</Button> */}
       <Button
         size="xs"
         colorScheme="teal"
-        onClick={() => joinChannel("audience")}
+        onClick={() => {
+          joinChannel("audience");
+          goback();
+        }}
+        disabled={loading}
       >
-        Join Channel as Audience
+        Audience
       </Button>
-      {/* <button onClick={() => leaveEventHost("host")}>Leave Event Host</button>
-      <button onClick={() => leaveEventAudience("audience")}>
-        Leave Event Audience
-      </button> */}
-      {/* <div
-        id="local_stream"
-        className="local_stream"
-        style={{ width: "auto", height: "200px" }}
-      ></div> */}
       <div id="remote_video_" style={{ width: "auto", height: "200px" }} />
+      {enable && (
+        <Button
+          colorScheme="red"
+          onClick={() => {
+            leaveEventAudience("audience");
+            navigate("/watchlive");
+          }}
+        >
+          Leave
+        </Button>
+      )}
     </div>
   );
 }
