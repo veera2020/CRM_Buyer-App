@@ -22,8 +22,8 @@ const NotFound = () => {
             height={45}            
           />
           <div className="flex flex-col">
-            <div className="text-sm font-semibold">Ticvic</div>
-              <div className="text-xs">Employee Management</div>
+            <div className="text-sm font-semibold">Uyarchi</div>
+              <div className="text-xs">Buyer App</div>
             </div>
           </div>
           <Image src={Not} alt="logo" width={400} height={400} />

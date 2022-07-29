@@ -190,7 +190,7 @@ function LiveVideoStreaming(props) {
         <Button
           colorScheme="red"
           onClick={() => {
-            leaveEventAudience("audience");
+            //leaveEventAudience("audience");
             navigate("/watchlive");
           }}
         >
