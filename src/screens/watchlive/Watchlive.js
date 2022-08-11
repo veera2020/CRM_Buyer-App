@@ -26,7 +26,7 @@ import { AiOutlineHeart, AiOutlineShoppingCart } from "react-icons/ai";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
 import Header from "../../components/Layout/Header";
-import Livestreaming from "./Livestreaming";
+// import Livestreaming from "./Livestreaming";
 import axios from "../../axios";
 const Watchlive = () => {
   const [data, setdata] = useState("");
